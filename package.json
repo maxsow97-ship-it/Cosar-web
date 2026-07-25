@@ -14,7 +14,8 @@
     "@supabase/supabase-js": "2.45.4",
     "@supabase/ssr": "0.5.1",
     "recharts": "2.12.7",
-    "qrcode": "1.5.4"
+    "qrcode": "1.5.4",
+    "leaflet": "1.9.4"
   },
   "devDependencies": {
     "tailwindcss": "3.4.10",
