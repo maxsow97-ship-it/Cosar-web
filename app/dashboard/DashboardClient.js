@@ -122,7 +122,10 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Back Office</div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 flex-wrap justify-end">
+          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
+            Centre Opérationnel
+          </a>
           <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Sites &amp; Rondes
           </a>
