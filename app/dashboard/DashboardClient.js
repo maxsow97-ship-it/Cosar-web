@@ -135,6 +135,9 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Catalogue &amp; Factures
           </a>
+          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
+            Registre K9
+          </a>
           <button onClick={logout} className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Déconnexion
           </button>
