@@ -24,7 +24,7 @@ const INC_STATUS = {
 };
 const GRAVITE_CLS = { haute: 'border-l-4 border-red-500', moyenne: 'border-l-4 border-amber-400', faible: 'border-l-4 border-slate-300' };
 
-function LiveMap({ agentPoints, sitePoints, ronde Points }) {
+function LiveMap({ agentPoints, sitePoints }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
   const markersLayer = useRef(null);
@@ -125,12 +125,10 @@ export default function OperationsClient({ userName, initialSites, initialAgents
   const alertesOuvertes = useMemo(() => incidents.filter(i => (i.statut || 'nouveau') !== 'resolu'), [incidents]);
   const alertesSOS = useMemo(() => alertesOuvertes.filter(i => (i.description || '').includes('SOS')), [alertesOuvertes]);
 
-  // Points pour la carte de suivi
   const mapAgentPoints = useMemo(() => enService.filter(p => p.latitude != null).map(p => ({
     lat: p.latitude, lng: p.longitude, label: agentName(p.agent_id), sub: siteName(p.site_id) + ' · depuis ' + fmtTime(p.horodatage),
   })), [enService, agentName, siteName]);
   const mapSitePoints = useMemo(() => {
-    // Utilise la position du site si connue, sinon la moyenne de ses points de ronde
     return sites.map(s => {
       if (s.latitude != null) return { lat: s.latitude, lng: s.longitude, label: s.nom };
       const pts = points.filter(p => p.site_id === s.id && p.latitude != null);
