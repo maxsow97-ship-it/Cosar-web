@@ -126,6 +126,9 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Centre Opérationnel
           </a>
+          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
+            COSAR TRACK
+          </a>
           <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Sites &amp; Rondes
           </a>
