@@ -77,6 +77,15 @@ function LiveMap({ agentPoints, sitePoints }) {
   return <div ref={mapRef} style={{ height: 360, borderRadius: 12, zIndex: 0 }} />;
 }
 
+const NAV_LINKS = [
+  { href: '/dashboard', label: 'Devis & Leads' },
+  { href: '/dashboard/track', label: 'COSAR TRACK' },
+  { href: '/dashboard/sites', label: 'Sites & Rondes' },
+  { href: '/dashboard/catalogue', label: 'Catalogue & Factures' },
+  { href: '/dashboard/k9', label: 'Registre K9' },
+  { href: '/dashboard/stock', label: 'Stock & Matériel' },
+];
+
 export default function OperationsClient({ userName, initialSites, initialAgents, initialPointages, initialIncidents, initialScans, initialMC, initialPoints }) {
   const [sites] = useState(initialSites);
   const [agents] = useState(initialAgents);
@@ -153,7 +162,7 @@ export default function OperationsClient({ userName, initialSites, initialAgents
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between">
+      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-4 md:px-6 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <div className="font-bold text-lg flex items-center gap-2">
             <span className="text-[#F8C018]">COSAR</span> ONE — Centre Opérationnel
@@ -161,13 +170,10 @@ export default function OperationsClient({ userName, initialSites, initialAgents
           </div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <div className="flex items-center gap-2 flex-wrap justify-end">
-          <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
-          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
-          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
-          <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Catalogue &amp; Factures</a>
-          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
-          <a href="/dashboard/stock" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Stock &amp; Matériel</a>
+        <div className="flex items-center gap-2 overflow-x-auto md:flex-wrap md:overflow-visible w-full md:w-auto pb-1 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
+          {NAV_LINKS.map(l => (
+            <a key={l.href} href={l.href} className="shrink-0 text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">{l.label}</a>
+          ))}
         </div>
       </header>
 
