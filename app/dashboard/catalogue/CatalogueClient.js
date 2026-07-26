@@ -107,7 +107,13 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
           <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Catalogue &amp; Factures</div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Retour au tableau de bord</a>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
+          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Centre Opérationnel</a>
+          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
+          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
+          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
+        </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6 print:hidden">
