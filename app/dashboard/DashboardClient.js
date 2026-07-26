@@ -138,6 +138,9 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Registre K9
           </a>
+          <a href="/dashboard/stock" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
+            Stock &amp; Matériel
+          </a>
           <button onClick={logout} className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
             Déconnexion
           </button>
@@ -157,6 +160,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
             { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
             { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
             { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
+            { href: '/dashboard/stock', icon: '📦', label: 'Stock & Matériel', bg: '#2471A3' },
           ].map((s) => (
             <a key={s.href} href={s.href} className="flex flex-col items-center gap-2 group">
               <div
