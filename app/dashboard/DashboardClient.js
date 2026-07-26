@@ -145,6 +145,31 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
       </header>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
+        <div className="text-center py-6">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#182038]">Que voulez-vous faire aujourd&apos;hui ?</h1>
+        </div>
+
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 pb-2">
+          {[
+            { href: '/dashboard', icon: '📃', label: 'Devis & Leads', bg: '#F8C018' },
+            { href: '/dashboard/operations', icon: '📡', label: 'Centre Opérationnel', bg: '#182038' },
+            { href: '/dashboard/track', icon: '📍', label: 'COSAR TRACK', bg: '#2471A3' },
+            { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
+            { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
+            { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
+          ].map((s) => (
+            <a key={s.href} href={s.href} className="flex flex-col items-center gap-2 group">
+              <div
+                className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-2xl md:text-3xl shadow-sm group-hover:scale-105 transition-transform"
+                style={{ backgroundColor: s.bg }}
+              >
+                {s.icon}
+              </div>
+              <span className="text-xs md:text-sm text-center text-[#182038] font-medium leading-tight">{s.label}</span>
+            </a>
+          ))}
+        </div>
+
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
           {[
             { label: 'Total reçu', value: kpis.total },
