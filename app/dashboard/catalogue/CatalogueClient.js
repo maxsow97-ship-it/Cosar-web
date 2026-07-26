@@ -113,6 +113,7 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
           <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
           <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
           <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
+          <a href="/dashboard/stock" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Stock &amp; Matériel</a>
         </div>
       </header>
 
