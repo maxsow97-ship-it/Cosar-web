@@ -84,11 +84,15 @@ export default function SitesClient({ userName, initialSites, initialPoints }) {
       <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between print:hidden">
         <div>
           <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Sites &amp; Rondes</div>
-          <div className="text-xs text-slate-300">Connecte : {userName}</div>
+          <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-          Retour au tableau de bord
-        </a>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
+          <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
+          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Centre Opérationnel</a>
+          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
+          <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Catalogue &amp; Factures</a>
+          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
+        </div>
       </header>
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-8 print:hidden">
@@ -143,7 +147,6 @@ export default function SitesClient({ userName, initialSites, initialPoints }) {
         )}
       </main>
 
-      {/* Vue imprimable, cachee a l'ecran, visible uniquement a l'impression */}
       <div className="hidden print:block p-8">
         <h1 className="text-2xl font-bold mb-1">{currentSite?.nom}</h1>
         <p className="text-sm text-slate-500 mb-6">QR codes des points de ronde COSAR ONE — a coller sur site</p>
