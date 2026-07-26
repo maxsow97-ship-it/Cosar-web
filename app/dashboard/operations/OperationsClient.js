@@ -24,6 +24,33 @@ const INC_STATUS = {
 };
 const GRAVITE_CLS = { haute: 'border-l-4 border-red-500', moyenne: 'border-l-4 border-amber-400', faible: 'border-l-4 border-slate-300' };
 
+const NAV_ITEMS = [
+  { href: '/dashboard', icon: '📃', label: 'Devis & Leads', bg: '#F8C018' },
+  { href: '/dashboard/operations', icon: '📡', label: 'Centre Opérationnel', bg: '#182038' },
+  { href: '/dashboard/track', icon: '📍', label: 'COSAR TRACK', bg: '#2471A3' },
+  { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
+  { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
+  { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
+  { href: '/dashboard/stock', icon: '📦', label: 'Stock & Matériel', bg: '#2471A3' },
+];
+
+function QuickNav({ current }) {
+  return (
+    <div className="bg-white border-b border-slate-200 px-4 py-3 overflow-x-auto">
+      <div className="flex gap-4 w-max mx-auto md:justify-center">
+        {NAV_ITEMS.map((item) => (
+          <a key={item.href} href={item.href} className={`flex flex-col items-center gap-1 shrink-0 ${current === item.href ? '' : 'opacity-70 hover:opacity-100'} transition-opacity`}>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-sm" style={{ backgroundColor: item.bg, boxShadow: current === item.href ? '0 0 0 2px #F8C018' : 'none' }}>
+              {item.icon}
+            </div>
+            <span className="text-[10px] text-slate-600 font-medium text-center leading-tight w-14">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function LiveMap({ agentPoints, sitePoints }) {
   const mapRef = useRef(null);
   const mapInstance = useRef(null);
@@ -76,15 +103,6 @@ function LiveMap({ agentPoints, sitePoints }) {
 
   return <div ref={mapRef} style={{ height: 360, borderRadius: 12, zIndex: 0 }} />;
 }
-
-const NAV_LINKS = [
-  { href: '/dashboard', label: 'Devis & Leads' },
-  { href: '/dashboard/track', label: 'COSAR TRACK' },
-  { href: '/dashboard/sites', label: 'Sites & Rondes' },
-  { href: '/dashboard/catalogue', label: 'Catalogue & Factures' },
-  { href: '/dashboard/k9', label: 'Registre K9' },
-  { href: '/dashboard/stock', label: 'Stock & Matériel' },
-];
 
 export default function OperationsClient({ userName, initialSites, initialAgents, initialPointages, initialIncidents, initialScans, initialMC, initialPoints }) {
   const [sites] = useState(initialSites);
@@ -162,7 +180,7 @@ export default function OperationsClient({ userName, initialSites, initialAgents
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-4 md:px-6 py-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between">
         <div>
           <div className="font-bold text-lg flex items-center gap-2">
             <span className="text-[#F8C018]">COSAR</span> ONE — Centre Opérationnel
@@ -170,12 +188,9 @@ export default function OperationsClient({ userName, initialSites, initialAgents
           </div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <div className="flex items-center gap-2 overflow-x-auto md:flex-wrap md:overflow-visible w-full md:w-auto pb-1 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0">
-          {NAV_LINKS.map(l => (
-            <a key={l.href} href={l.href} className="shrink-0 text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">{l.label}</a>
-          ))}
-        </div>
       </header>
+
+      <QuickNav current="/dashboard/operations" />
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {alertesSOS.length > 0 && (
