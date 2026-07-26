@@ -42,7 +42,7 @@ function LiveMap({ agentPoints, sitePoints }) {
       const L = await import('leaflet');
       if (cancelled || !mapRef.current) return;
       if (!mapInstance.current) {
-        mapInstance.current = L.map(mapRef.current).setView([14.7167, -17.4677], 12); // Dakar par defaut
+        mapInstance.current = L.map(mapRef.current).setView([14.7167, -17.4677], 12);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap',
           maxZoom: 19,
@@ -161,9 +161,12 @@ export default function OperationsClient({ userName, initialSites, initialAgents
           </div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <div className="flex items-center gap-3">
-          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
+          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
+          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
+          <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Catalogue &amp; Factures</a>
+          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
         </div>
       </header>
 
