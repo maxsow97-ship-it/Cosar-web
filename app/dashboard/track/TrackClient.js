@@ -24,7 +24,6 @@ export default function TrackClient({ userName, initialAssets }) {
   const markers = useRef({});
   const supabase = createClient();
 
-  // Charger Leaflet depuis un CDN (pas de dependance npm necessaire)
   useEffect(() => {
     if (window.L) { setMapReady(true); return; }
     const link = document.createElement('link');
@@ -40,7 +39,7 @@ export default function TrackClient({ userName, initialAssets }) {
   useEffect(() => {
     if (!mapReady || !mapRef.current || leafletMap.current) return;
     const L = window.L;
-    leafletMap.current = L.map(mapRef.current).setView([14.7167, -17.4677], 11); // Dakar par defaut
+    leafletMap.current = L.map(mapRef.current).setView([14.7167, -17.4677], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '&copy; OpenStreetMap' }).addTo(leafletMap.current);
   }, [mapReady]);
 
@@ -60,7 +59,6 @@ export default function TrackClient({ userName, initialAssets }) {
 
   useEffect(() => { refreshMarkers(); }, [refreshMarkers]);
 
-  // Temps reel : nouvelles positions
   useEffect(() => {
     const channel = supabase.channel('track-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'tracked_assets' }, (payload) => {
@@ -100,9 +98,12 @@ export default function TrackClient({ userName, initialAssets }) {
           <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> TRACK</div>
           <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
-        <div className="flex items-center gap-3">
-          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Centre Opérationnel</a>
+        <div className="flex items-center gap-2 flex-wrap justify-end">
           <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
+          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Centre Opérationnel</a>
+          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
+          <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Catalogue &amp; Factures</a>
+          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
         </div>
       </header>
 
