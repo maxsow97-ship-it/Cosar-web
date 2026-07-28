@@ -14,9 +14,19 @@ function extractCvUrl(message) {
   return m ? m[1] : null;
 }
 
+function messageWithoutCv(message) {
+  if (!message) return '';
+  return message.replace(/\n*CV joint\s*:\s*https?:\/\/\S+/i, '').trim();
+}
+
 function fmtDate(iso) {
   try {
     return new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+  } catch (e) { return iso; }
+}
+function fmtDateLong(iso) {
+  try {
+    return new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
   } catch (e) { return iso; }
 }
 
@@ -39,6 +49,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
   const [statusFilter, setStatusFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [analyzing, setAnalyzing] = useState(null);
+  const [viewing, setViewing] = useState(null);
   const router = useRouter();
   const supabase = createClient();
 
@@ -253,6 +264,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                   <th className="py-2 pr-3">Nom</th>
                   <th className="py-2 pr-3">Contact</th>
                   <th className="py-2 pr-3">Service / Poste</th>
+                  <th className="py-2 pr-3">Message</th>
                   <th className="py-2 pr-3">CV</th>
                   <th className="py-2 pr-3">Analyse IA</th>
                   <th className="py-2 pr-3">Statut</th>
@@ -261,6 +273,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
               <tbody>
                 {filteredRows.map((r) => {
                   const cvUrl = extractCvUrl(r.message);
+                  const cleanMsg = messageWithoutCv(r.message);
                   const st = STATUS_LABELS[r.status || 'nouveau'] || STATUS_LABELS.nouveau;
                   const ug = r.ai_urgency ? URGENCY_LABELS[r.ai_urgency] : null;
                   return (
@@ -275,6 +288,15 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                         <span className={`text-xs px-2 py-0.5 rounded-full ${isCandidature(r) ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'}`}>
                           {r.service}
                         </span>
+                      </td>
+                      <td className="py-2.5 pr-3">
+                        {cleanMsg ? (
+                          <button onClick={() => setViewing(r)} className="text-xs text-[#2471A3] font-medium hover:underline">
+                            Voir le message
+                          </button>
+                        ) : (
+                          <span className="text-slate-300">—</span>
+                        )}
                       </td>
                       <td className="py-2.5 pr-3">
                         {cvUrl ? (
@@ -316,13 +338,34 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                   );
                 })}
                 {filteredRows.length === 0 && (
-                  <tr><td colSpan={7} className="py-8 text-center text-slate-400">Aucun résultat.</td></tr>
+                  <tr><td colSpan={8} className="py-8 text-center text-slate-400">Aucun résultat.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
       </main>
+
+      {viewing && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4" onClick={() => setViewing(null)}>
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <div className="font-semibold text-[#182038]">{viewing.nom}</div>
+                <div className="text-xs text-slate-500">{viewing.telephone} {viewing.email && `· ${viewing.email}`}</div>
+                <div className="text-xs text-slate-400 mt-0.5">{fmtDateLong(viewing.created_at)}</div>
+              </div>
+              <button onClick={() => setViewing(null)} className="text-slate-400 hover:text-slate-600 text-xl leading-none">✕</button>
+            </div>
+            <div className="text-xs text-slate-500 mb-1">Service demandé</div>
+            <div className="text-sm text-[#182038] font-medium mb-4">{viewing.service}</div>
+            <div className="text-xs text-slate-500 mb-1">Message</div>
+            <div className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed bg-slate-50 rounded-lg p-3">
+              {messageWithoutCv(viewing.message) || 'Aucun message.'}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
