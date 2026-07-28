@@ -121,11 +121,20 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
   }
 
   async function updateInvoiceStatus(id, statut) {
-    setInvoices(prev => prev.map(i => i.id === id ? { ...i, statut } : i));
-    await supabase.from('invoices').update({ statut }).eq('id', id);
+    const { data } = await supabase.from('invoices').update({ statut }).eq('id', id).select().maybeSingle();
+    setInvoices(prev => prev.map(i => i.id === id ? (data || { ...i, statut }) : i));
   }
 
   const [printing, setPrinting] = useState(null);
+  const [copiedId, setCopiedId] = useState(null);
+
+  function copyContractLink(invId, token) {
+    const url = `${window.location.origin}/contrat/${token}`;
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(invId);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  }
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -245,7 +254,7 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
               <h2 className="font-semibold text-[#182038] mb-4">Factures émises</h2>
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
-                  <thead><tr className="text-left text-slate-500 border-b border-slate-200"><th className="py-2 pr-3">N°</th><th className="py-2 pr-3">Client</th><th className="py-2 pr-3">Date</th><th className="py-2 pr-3">Total TTC</th><th className="py-2 pr-3">Statut</th><th className="py-2 pr-3"></th></tr></thead>
+                  <thead><tr className="text-left text-slate-500 border-b border-slate-200"><th className="py-2 pr-3">N°</th><th className="py-2 pr-3">Client</th><th className="py-2 pr-3">Date</th><th className="py-2 pr-3">Total TTC</th><th className="py-2 pr-3">Statut</th><th className="py-2 pr-3">Contrat</th><th className="py-2 pr-3"></th></tr></thead>
                   <tbody>
                     {invoices.map(inv => {
                       const st = STATUT_FACTURE[inv.statut || 'brouillon'];
@@ -260,11 +269,18 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
                               {Object.entries(STATUT_FACTURE).map(([k, v]) => <option key={k} value={k}>{v.label}</option>)}
                             </select>
                           </td>
+                          <td className="py-2.5 pr-3">
+                            {inv.statut === 'payee' && inv.access_token ? (
+                              <button onClick={() => copyContractLink(inv.id, inv.access_token)} className="text-xs text-emerald-700 hover:underline">
+                                {copiedId === inv.id ? 'Copié !' : (inv.contract_accepted_at ? '✓ Signé — copier' : 'Copier le lien')}
+                              </button>
+                            ) : <span className="text-xs text-slate-300">—</span>}
+                          </td>
                           <td className="py-2.5 pr-3"><button onClick={() => setPrinting(inv)} className="text-xs text-[#2471A3] hover:underline">Voir / Imprimer</button></td>
                         </tr>
                       );
                     })}
-                    {invoices.length === 0 && <tr><td colSpan={6} className="py-8 text-center text-slate-400">Aucune facture pour l&apos;instant.</td></tr>}
+                    {invoices.length === 0 && <tr><td colSpan={7} className="py-8 text-center text-slate-400">Aucune facture pour l&apos;instant.</td></tr>}
                   </tbody>
                 </table>
               </div>
