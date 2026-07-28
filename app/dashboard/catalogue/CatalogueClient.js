@@ -11,6 +11,33 @@ const STATUT_FACTURE = {
   impayee: { label: 'Impayée', cls: 'bg-red-100 text-red-700' },
 };
 
+const NAV_ITEMS = [
+  { href: '/dashboard', icon: '📃', label: 'Devis & Leads', bg: '#F8C018' },
+  { href: '/dashboard/operations', icon: '📡', label: 'Centre Opérationnel', bg: '#182038' },
+  { href: '/dashboard/track', icon: '📍', label: 'COSAR TRACK', bg: '#2471A3' },
+  { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
+  { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
+  { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
+  { href: '/dashboard/stock', icon: '📦', label: 'Stock & Matériel', bg: '#2471A3' },
+];
+
+function QuickNav({ current }) {
+  return (
+    <div className="bg-white border-b border-slate-200 px-4 py-3 overflow-x-auto print:hidden">
+      <div className="flex gap-4 w-max mx-auto md:justify-center">
+        {NAV_ITEMS.map((item) => (
+          <a key={item.href} href={item.href} className={`flex flex-col items-center gap-1 shrink-0 ${current === item.href ? '' : 'opacity-70 hover:opacity-100'} transition-opacity`}>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-sm" style={{ backgroundColor: item.bg, boxShadow: current === item.href ? '0 0 0 2px #F8C018' : 'none' }}>
+              {item.icon}
+            </div>
+            <span className="text-[10px] text-slate-600 font-medium text-center leading-tight w-14">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function fmtFCFA(n) {
   return new Intl.NumberFormat('fr-FR').format(Math.round(n || 0)) + ' FCFA';
 }
@@ -102,20 +129,12 @@ export default function CatalogueClient({ userName, initialServices, initialInvo
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between print:hidden">
-        <div>
-          <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Catalogue &amp; Factures</div>
-          <div className="text-xs text-slate-300">Connecté : {userName}</div>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap justify-end">
-          <a href="/dashboard" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Devis &amp; Leads</a>
-          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Centre Opérationnel</a>
-          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">COSAR TRACK</a>
-          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Sites &amp; Rondes</a>
-          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Registre K9</a>
-          <a href="/dashboard/stock" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">Stock &amp; Matériel</a>
-        </div>
+      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 print:hidden">
+        <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Catalogue &amp; Factures</div>
+        <div className="text-xs text-slate-300">Connecté : {userName}</div>
       </header>
+
+      <QuickNav current="/dashboard/catalogue" />
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6 print:hidden">
         <div className="flex gap-2">
