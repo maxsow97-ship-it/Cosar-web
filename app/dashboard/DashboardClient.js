@@ -360,8 +360,31 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
             <div className="text-xs text-slate-500 mb-1">Service demandé</div>
             <div className="text-sm text-[#182038] font-medium mb-4">{viewing.service}</div>
             <div className="text-xs text-slate-500 mb-1">Message</div>
-            <div className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed bg-slate-50 rounded-lg p-3">
+            <div className="text-sm text-slate-700 whitespace-pre-wrap leading-relaxed bg-slate-50 rounded-lg p-3 mb-4">
               {messageWithoutCv(viewing.message) || 'Aucun message.'}
+            </div>
+            <div className="text-xs text-slate-500 mb-2">Répondre</div>
+            <div className="flex gap-2 flex-wrap">
+              {viewing.telephone && (
+                <a
+                  href={`https://wa.me/${viewing.telephone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bonjour ${viewing.nom}, merci pour votre message concernant "${viewing.service}". `)}`}
+                  target="_blank" rel="noopener noreferrer"
+                  className="text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg px-3 py-2 transition-colors"
+                >
+                  💬 WhatsApp
+                </a>
+              )}
+              {viewing.email && (
+                <a
+                  href={`mailto:${viewing.email}?subject=${encodeURIComponent(`COSAR GROUP — ${viewing.service}`)}&body=${encodeURIComponent(`Bonjour ${viewing.nom},\n\nMerci pour votre message concernant "${viewing.service}".\n\n`)}`}
+                  className="text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg px-3 py-2 transition-colors"
+                >
+                  ✉️ Email
+                </a>
+              )}
+              {!viewing.telephone && !viewing.email && (
+                <span className="text-xs text-slate-400">Aucun contact disponible.</span>
+              )}
             </div>
           </div>
         </div>
