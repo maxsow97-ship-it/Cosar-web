@@ -19,6 +19,21 @@ function messageWithoutCv(message) {
   return message.replace(/\n*CV joint\s*:\s*https?:\/\/\S+/i, '').trim();
 }
 
+function whatsappLink(tel, nom, service) {
+  if (!tel) return null;
+  return `https://wa.me/${tel.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bonjour ${nom}, merci pour votre message concernant "${service}". `)}`;
+}
+
+function mailtoLink(email, nom, service) {
+  if (!email) return null;
+  return `mailto:${email}?subject=${encodeURIComponent(`COSAR GROUP — ${service}`)}&body=${encodeURIComponent(`Bonjour ${nom},\n\nMerci pour votre message concernant "${service}".\n\n`)}`;
+}
+
+function smsLink(tel, nom, service) {
+  if (!tel) return null;
+  return `sms:${tel.replace(/\s/g, '')}?body=${encodeURIComponent(`Bonjour ${nom}, ici COSAR GROUP suite à votre message concernant "${service}". `)}`;
+}
+
 function fmtDate(iso) {
   try {
     return new Date(iso).toLocaleString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
@@ -267,6 +282,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                   <th className="py-2 pr-3">Message</th>
                   <th className="py-2 pr-3">CV</th>
                   <th className="py-2 pr-3">Analyse IA</th>
+                  <th className="py-2 pr-3">Répondre</th>
                   <th className="py-2 pr-3">Statut</th>
                 </tr>
               </thead>
@@ -324,6 +340,20 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                         )}
                       </td>
                       <td className="py-2.5 pr-3">
+                        <div className="flex items-center gap-2 text-base">
+                          {whatsappLink(r.telephone, r.nom, r.service) && (
+                            <a href={whatsappLink(r.telephone, r.nom, r.service)} target="_blank" rel="noopener noreferrer" title="WhatsApp" className="text-emerald-600 hover:text-emerald-800">💬</a>
+                          )}
+                          {mailtoLink(r.email, r.nom, r.service) && (
+                            <a href={mailtoLink(r.email, r.nom, r.service)} title="Email" className="text-blue-600 hover:text-blue-800">✉️</a>
+                          )}
+                          {smsLink(r.telephone, r.nom, r.service) && (
+                            <a href={smsLink(r.telephone, r.nom, r.service)} title="SMS" className="text-[#D9A600] hover:text-[#B58500]">📱</a>
+                          )}
+                          {!r.telephone && !r.email && <span className="text-slate-300">—</span>}
+                        </div>
+                      </td>
+                      <td className="py-2.5 pr-3">
                         <select
                           value={r.status || 'nouveau'}
                           onChange={(e) => updateStatus(r.id, e.target.value)}
@@ -338,7 +368,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                   );
                 })}
                 {filteredRows.length === 0 && (
-                  <tr><td colSpan={8} className="py-8 text-center text-slate-400">Aucun résultat.</td></tr>
+                  <tr><td colSpan={9} className="py-8 text-center text-slate-400">Aucun résultat.</td></tr>
                 )}
               </tbody>
             </table>
@@ -365,21 +395,29 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
             </div>
             <div className="text-xs text-slate-500 mb-2">Répondre</div>
             <div className="flex gap-2 flex-wrap">
-              {viewing.telephone && (
+              {whatsappLink(viewing.telephone, viewing.nom, viewing.service) && (
                 <a
-                  href={`https://wa.me/${viewing.telephone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Bonjour ${viewing.nom}, merci pour votre message concernant "${viewing.service}". `)}`}
+                  href={whatsappLink(viewing.telephone, viewing.nom, viewing.service)}
                   target="_blank" rel="noopener noreferrer"
                   className="text-xs font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 rounded-lg px-3 py-2 transition-colors"
                 >
                   💬 WhatsApp
                 </a>
               )}
-              {viewing.email && (
+              {mailtoLink(viewing.email, viewing.nom, viewing.service) && (
                 <a
-                  href={`mailto:${viewing.email}?subject=${encodeURIComponent(`COSAR GROUP — ${viewing.service}`)}&body=${encodeURIComponent(`Bonjour ${viewing.nom},\n\nMerci pour votre message concernant "${viewing.service}".\n\n`)}`}
+                  href={mailtoLink(viewing.email, viewing.nom, viewing.service)}
                   className="text-xs font-semibold bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg px-3 py-2 transition-colors"
                 >
                   ✉️ Email
+                </a>
+              )}
+              {smsLink(viewing.telephone, viewing.nom, viewing.service) && (
+                <a
+                  href={smsLink(viewing.telephone, viewing.nom, viewing.service)}
+                  className="text-xs font-semibold bg-amber-50 text-[#D9A600] hover:bg-amber-100 rounded-lg px-3 py-2 transition-colors"
+                >
+                  📱 SMS
                 </a>
               )}
               {!viewing.telephone && !viewing.email && (
