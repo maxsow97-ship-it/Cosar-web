@@ -1,8 +1,8 @@
 'use client';
 import { useMemo, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { createClient } from '@/lib/supabase/client';
+import DashboardShell from './DashboardShell';
 
 function isCandidature(row) {
   return (row.service || '').startsWith('Candidature');
@@ -65,7 +65,6 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
   const [search, setSearch] = useState('');
   const [analyzing, setAnalyzing] = useState(null);
   const [viewing, setViewing] = useState(null);
-  const router = useRouter();
   const supabase = createClient();
 
   const now = new Date();
@@ -127,12 +126,6 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
     }
   }
 
-  async function logout() {
-    await supabase.auth.signOut();
-    router.push('/login');
-    router.refresh();
-  }
-
   const topPages = useMemo(() => {
     const counts = {};
     analyticsEvents.forEach((e) => {
@@ -142,62 +135,10 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
   }, [analyticsEvents]);
 
   return (
-    <div className="min-h-screen">
-      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between">
-        <div>
-          <div className="font-bold text-lg"><span className="text-[#F8C018]">COSAR</span> ONE — Back Office</div>
-          <div className="text-xs text-slate-300">Connecté : {userName}</div>
-        </div>
-        <div className="flex items-center gap-3 flex-wrap justify-end">
-          <a href="/dashboard/operations" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Centre Opérationnel
-          </a>
-          <a href="/dashboard/track" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            COSAR TRACK
-          </a>
-          <a href="/dashboard/sites" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Sites &amp; Rondes
-          </a>
-          <a href="/dashboard/catalogue" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Catalogue &amp; Factures
-          </a>
-          <a href="/dashboard/k9" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Registre K9
-          </a>
-          <a href="/dashboard/stock" className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Stock &amp; Matériel
-          </a>
-          <button onClick={logout} className="text-sm bg-white/10 hover:bg-white/20 rounded-lg px-3 py-1.5 transition-colors">
-            Déconnexion
-          </button>
-        </div>
-      </header>
-
+    <DashboardShell userName={userName}>
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
-        <div className="text-center py-6">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#182038]">Que voulez-vous faire aujourd&apos;hui ?</h1>
-        </div>
-
-        <div className="grid grid-cols-3 md:grid-cols-6 gap-4 md:gap-6 pb-2">
-          {[
-            { href: '/dashboard', icon: '📃', label: 'Devis & Leads', bg: '#F8C018' },
-            { href: '/dashboard/operations', icon: '📡', label: 'Centre Opérationnel', bg: '#182038' },
-            { href: '/dashboard/track', icon: '📍', label: 'COSAR TRACK', bg: '#2471A3' },
-            { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
-            { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
-            { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
-            { href: '/dashboard/stock', icon: '📦', label: 'Stock & Matériel', bg: '#2471A3' },
-          ].map((s) => (
-            <a key={s.href} href={s.href} className="flex flex-col items-center gap-2 group">
-              <div
-                className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center text-2xl md:text-3xl shadow-sm group-hover:scale-105 transition-transform"
-                style={{ backgroundColor: s.bg }}
-              >
-                {s.icon}
-              </div>
-              <span className="text-xs md:text-sm text-center text-[#182038] font-medium leading-tight">{s.label}</span>
-            </a>
-          ))}
+        <div className="pb-2">
+          <h1 className="text-2xl font-bold text-[#182038]">Que voulez-vous faire aujourd&apos;hui ?</h1>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
@@ -427,6 +368,6 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           </div>
         </div>
       )}
-    </div>
+    </DashboardShell>
   );
 }
