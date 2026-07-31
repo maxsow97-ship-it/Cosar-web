@@ -8,6 +8,10 @@ function isCandidature(row) {
   return (row.service || '').startsWith('Candidature');
 }
 
+function isPartenariat(row) {
+  return (row.service || '').startsWith('Partenariat');
+}
+
 function extractCvUrl(message) {
   if (!message) return null;
   const m = message.match(/CV joint\s*:\s*(https?:\/\/\S+)/i);
@@ -73,10 +77,11 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
   const kpis = useMemo(() => {
     const total = rows.length;
     const candidatures = rows.filter(isCandidature).length;
-    const devisCount = total - candidatures;
+    const partenariats = rows.filter(isPartenariat).length;
+    const devisCount = total - candidatures - partenariats;
     const thisWeek = rows.filter((r) => new Date(r.created_at) >= weekAgo).length;
     const nonTraites = rows.filter((r) => (r.status || 'nouveau') !== 'traite' && (r.status || 'nouveau') !== 'archive').length;
-    return { total, candidatures, devisCount, thisWeek, nonTraites };
+    return { total, candidatures, partenariats, devisCount, thisWeek, nonTraites };
   }, [rows]);
 
   const chartData = useMemo(() => {
@@ -99,8 +104,9 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
 
   const filteredRows = useMemo(() => {
     return rows.filter((r) => {
-      if (filter === 'devis' && isCandidature(r)) return false;
+      if (filter === 'devis' && (isCandidature(r) || isPartenariat(r))) return false;
       if (filter === 'candidatures' && !isCandidature(r)) return false;
+      if (filter === 'partenariats' && !isPartenariat(r)) return false;
       if (statusFilter !== 'all' && (r.status || 'nouveau') !== statusFilter) return false;
       if (search) {
         const s = search.toLowerCase();
@@ -141,11 +147,12 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
           <h1 className="text-2xl font-bold text-[#182038]">Que voulez-vous faire aujourd&apos;hui ?</h1>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           {[
             { label: 'Total reçu', value: kpis.total },
             { label: 'Devis', value: kpis.devisCount },
             { label: 'Candidatures', value: kpis.candidatures },
+            { label: 'Partenariats', value: kpis.partenariats },
             { label: '7 derniers jours', value: kpis.thisWeek },
             { label: 'À traiter', value: kpis.nonTraites, accent: kpis.nonTraites > 0 },
           ].map((k) => (
@@ -202,6 +209,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
               <option value="all">Tout</option>
               <option value="devis">Devis</option>
               <option value="candidatures">Candidatures</option>
+              <option value="partenariats">Partenariats</option>
             </select>
             <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="border border-slate-300 rounded-lg px-2 py-1.5 text-sm">
               <option value="all">Tous statuts</option>
@@ -233,6 +241,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                   const cleanMsg = messageWithoutCv(r.message);
                   const st = STATUS_LABELS[r.status || 'nouveau'] || STATUS_LABELS.nouveau;
                   const ug = r.ai_urgency ? URGENCY_LABELS[r.ai_urgency] : null;
+                  const badgeCls = isCandidature(r) ? 'bg-purple-100 text-purple-700' : isPartenariat(r) ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700';
                   return (
                     <tr key={r.id} className="border-b border-slate-100 hover:bg-slate-50">
                       <td className="py-2.5 pr-3 text-slate-500 whitespace-nowrap">{fmtDate(r.created_at)}</td>
@@ -242,7 +251,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
                         {r.email && <div className="text-xs text-slate-400">{r.email}</div>}
                       </td>
                       <td className="py-2.5 pr-3">
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${isCandidature(r) ? 'bg-purple-100 text-purple-700' : 'bg-slate-100 text-slate-700'}`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full ${badgeCls}`}>
                           {r.service}
                         </span>
                       </td>
