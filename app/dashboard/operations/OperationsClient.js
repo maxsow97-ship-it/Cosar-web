@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { createClient } from '@/lib/supabase/client';
-import DashboardShell from '../DashboardShell';
 
 function fmtTime(iso) {
   try { return new Date(iso).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }); } catch (e) { return iso; }
@@ -24,6 +23,33 @@ const INC_STATUS = {
   resolu: { label: 'Résolu', cls: 'bg-emerald-100 text-emerald-700' },
 };
 const GRAVITE_CLS = { haute: 'border-l-4 border-red-500', moyenne: 'border-l-4 border-amber-400', faible: 'border-l-4 border-slate-300' };
+
+const NAV_ITEMS = [
+  { href: '/dashboard', icon: '📃', label: 'Devis & Leads', bg: '#F8C018' },
+  { href: '/dashboard/operations', icon: '📡', label: 'Centre Opérationnel', bg: '#182038' },
+  { href: '/dashboard/track', icon: '📍', label: 'COSAR TRACK', bg: '#2471A3' },
+  { href: '/dashboard/sites', icon: '🛡️', label: 'Sites & Rondes', bg: '#182038' },
+  { href: '/dashboard/catalogue', icon: '🧾', label: 'Catalogue & Factures', bg: '#F8C018' },
+  { href: '/dashboard/k9', icon: '🐾', label: 'Registre K9', bg: '#B03A2E' },
+  { href: '/dashboard/stock', icon: '📦', label: 'Stock & Matériel', bg: '#2471A3' },
+];
+
+function QuickNav({ current }) {
+  return (
+    <div className="bg-white border-b border-slate-200 px-4 py-3 overflow-x-auto">
+      <div className="flex gap-4 w-max mx-auto md:justify-center">
+        {NAV_ITEMS.map((item) => (
+          <a key={item.href} href={item.href} className={`flex flex-col items-center gap-1 shrink-0 ${current === item.href ? '' : 'opacity-70 hover:opacity-100'} transition-opacity`}>
+            <div className="w-11 h-11 rounded-full flex items-center justify-center text-lg shadow-sm" style={{ backgroundColor: item.bg, boxShadow: current === item.href ? '0 0 0 2px #F8C018' : 'none' }}>
+              {item.icon}
+            </div>
+            <span className="text-[10px] text-slate-600 font-medium text-center leading-tight w-14">{item.label}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function LiveMap({ agentPoints, sitePoints }) {
   const mapRef = useRef(null);
@@ -153,13 +179,20 @@ export default function OperationsClient({ userName, initialSites, initialAgents
   ];
 
   return (
-    <DashboardShell userName={userName}>
-      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-        <div className="flex items-center gap-2">
-          <h1 className="text-xl font-bold text-[#182038]">Centre Opérationnel</h1>
-          <span className={`inline-block w-2 h-2 rounded-full ${live ? 'bg-emerald-400 animate-pulse' : 'bg-slate-400'}`} title={live ? 'Connexion temps reel active' : 'En attente'} />
+    <div className="min-h-screen bg-slate-50">
+      <header className="bg-gradient-to-r from-[#182038] to-[#10182C] text-white px-6 py-4 flex items-center justify-between">
+        <div>
+          <div className="font-bold text-lg flex items-center gap-2">
+            <span className="text-[#F8C018]">COSAR</span> ONE — Centre Opérationnel
+            <span className={`inline-block w-2 h-2 rounded-full ${live ? 'bg-emerald-400 animate-pulse' : 'bg-slate-500'}`} title={live ? 'Connexion temps reel active' : 'En attente'} />
+          </div>
+          <div className="text-xs text-slate-300">Connecté : {userName}</div>
         </div>
+      </header>
 
+      <QuickNav current="/dashboard/operations" />
+
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {alertesSOS.length > 0 && (
           <div className="bg-red-600 text-white rounded-xl p-4 flex items-center gap-3 animate-pulse">
             <span className="text-2xl">🆘</span>
@@ -278,7 +311,7 @@ export default function OperationsClient({ userName, initialSites, initialAgents
             </div>
           </div>
         </div>
-      </div>
-    </DashboardShell>
+      </main>
+    </div>
   );
 }
