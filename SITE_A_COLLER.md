@@ -5,8 +5,8 @@
 À coller dans `index.html` (et dans chaque page où vous voulez le chat), juste avant `</body>` :
 
 ```html
-<script src="https://cosar-web.vercel.app/cosar-ai-widget.js"
-        data-api="https://cosar-web.vercel.app/api/ai"
+<script src="https://cosar-group.netlify.app/cosar-ai-widget.js"
+        data-api="https://cosar-group.netlify.app/api/ai"
         data-whatsapp="221773259658"
         data-phone="+221773259658"
         data-email="commercial@cosar-group.online"
@@ -15,10 +15,10 @@
 
 - `data-whatsapp` : numéro au format international, sans « + » ni espaces. Celui ci-dessus vient de votre profil : remplacez-le par le numéro officiel COSAR si vous en avez un.
 - `data-phone` et `data-email` : affichés dans les boutons de repli quand l'assistant est indisponible.
-- Facultatif : `data-logo="https://cosar-web.vercel.app/cosar-shield.png"` pour afficher le bouclier maître dans l'en-tête du chat (il se pose sur une carte blanche, conformément à la règle de contraste).
+- Facultatif : `data-logo="https://cosar-group.netlify.app/shield.png"` pour afficher le bouclier maître dans l'en-tête du chat (il se pose sur une carte blanche, conformément à la règle de contraste).
 - Ne mettez jamais de clé secrète dans le site. Le site ne contient que cette balise.
 
-Si le fichier `cosar-ai-widget.js` n'est pas encore en ligne sur Vercel, la balise ne fait rien et le site reste intact. Mettez donc d'abord le widget sur GitHub, puis la balise sur le site.
+Si le fichier `cosar-ai-widget.js` n'est pas encore en ligne sur Netlify, la balise ne fait rien et le site reste intact. Le widget est publié automatiquement par Netlify à chaque mise à jour du dépôt GitHub ; ajoutez ensuite la balise sur le site.
 
 ## 2. Boutons « Demander un devis » existants
 
