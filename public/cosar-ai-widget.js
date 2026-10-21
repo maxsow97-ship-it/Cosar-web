@@ -1,8 +1,8 @@
 /*! COSAR AI widget v1 : un seul fichier, aucune dépendance.
  * Chemin dans le dépôt : public/cosar-ai-widget.js
  * Balise à coller dans le site :
- * <script src="https://cosar-web.vercel.app/cosar-ai-widget.js"
- *   data-api="https://cosar-web.vercel.app/api/ai"
+ * <script src="https://cosar-group.netlify.app/cosar-ai-widget.js"
+ *   data-api="https://cosar-group.netlify.app/api/ai"
  *   data-whatsapp="221773259658" data-phone="+221773259658"
  *   data-email="commercial@cosar-group.online" defer></script>
  * Options : data-demo="true" (réponses simulées, aucune donnée envoyée),

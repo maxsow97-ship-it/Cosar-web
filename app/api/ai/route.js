@@ -1,7 +1,7 @@
-// COSAR AI : orchestrateur (Next.js App Router, Vercel)
+// COSAR AI : orchestrateur (Next.js App Router, Netlify)
 // Chemin dans le dépôt : app/api/ai/route.js
-// Variables d'environnement (Vercel > Settings > Environment Variables) :
-//   ANTHROPIC_API_KEY            (obligatoire)
+// Variables d'environnement (Netlify > Project configuration > Environment variables) :
+//   ANTHROPIC_API_KEY / ANTHROPIC_BASE_URL  (fournies automatiquement par Netlify AI Gateway)
 //   SUPABASE_SERVICE_ROLE_KEY    (obligatoire pour enregistrer leads et conversations)
 //   NEXT_PUBLIC_SUPABASE_URL     (déjà présente dans le back-office)
 //   COSAR_AI_MODEL               (facultatif, défaut claude-sonnet-5-5)
@@ -20,6 +20,7 @@ const DEFAULT_ORIGINS = [
   'https://cosar-group.online',
   'https://www.cosar-group.online',
   'https://cosar-web.vercel.app',
+  'https://cosar-group.netlify.app',
   'http://cosargz.cluster129.hosting.ovh.net',
   'https://cosargz.cluster129.hosting.ovh.net',
 ].join(',');
@@ -247,7 +248,8 @@ async function callClaude(messages) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), 25000);
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const base = (process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com').replace(/\/$/, '');
+    const res = await fetch(`${base}/v1/messages`, {
       method: 'POST',
       signal: ctrl.signal,
       headers: {
