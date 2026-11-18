@@ -1,20 +1,115 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ── Tokens alignés site vitrine COSAR (Document Maître) ── */
 :root {
   --navy: #182038;
+  --navy-deep: #10182C;
   --gold: #F8C018;
+  --gold-deep: #D9A600;
+  --paper: #FFFFFF;
+  --ink: #14181F;
+  --slate: #5B6472;
+  --line: #E7E9EE;
+  --surface: #FFFFFF;
+  --surface-2: #F6F7FA;
+  --heading: #182038;
+  --k9: #B03A2E;
+  --tech: #2471A3;
+  --font-body: 'Work Sans', system-ui, sans-serif;
+  --font-display: 'Oswald', system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    font-family: var(--font-body);
+    background: var(--surface-2);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, .disp {
+    font-family: var(--font-display);
+    color: var(--heading);
+  }
 }
 
 @layer components {
   .card {
-    @apply bg-white rounded-2xl border border-slate-200 shadow-sm;
+    @apply bg-white rounded-xl border border-[#E7E9EE] shadow-sm;
   }
+
   .btn-gold {
-    @apply bg-[#F8C018] text-[#182038] font-semibold rounded-lg px-4 py-2.5 hover:bg-[#D9A600] transition-colors;
+    background: var(--gold);
+    color: var(--navy);
+    font-family: var(--font-body);
+    font-weight: 600;
+    @apply rounded-lg px-4 py-2.5 transition-colors inline-flex items-center justify-center gap-2;
   }
+  .btn-gold:hover {
+    background: var(--gold-deep);
+  }
+
+  .btn-navy {
+    background: var(--navy);
+    color: #fff;
+    font-weight: 600;
+    @apply rounded-lg px-4 py-2.5 transition-colors inline-flex items-center justify-center gap-2;
+  }
+  .btn-navy:hover {
+    background: var(--navy-deep);
+  }
+
   .btn-outline {
-    @apply border border-slate-300 text-slate-700 font-semibold rounded-lg px-4 py-2.5 hover:bg-slate-100 transition-colors;
+    border: 1px solid var(--line);
+    color: var(--slate);
+    font-weight: 600;
+    @apply rounded-lg px-4 py-2.5 transition-colors bg-white hover:bg-[#F6F7FA];
+  }
+
+  .eyebrow {
+    font-family: var(--font-display);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 11.5px;
+    color: var(--gold-deep);
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.01em;
+  }
+
+  .kpi-value {
+    font-family: var(--font-display);
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  /* Shell sidebar (comme nav site) */
+  .shell-sidebar {
+    background: linear-gradient(180deg, var(--navy), var(--navy-deep));
+  }
+
+  .shell-nav-active {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 600;
+  }
+
+  .shell-nav-idle {
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .shell-nav-idle:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
   }
 }

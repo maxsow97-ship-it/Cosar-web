@@ -15,7 +15,8 @@
     "@supabase/ssr": "0.5.1",
     "recharts": "2.12.7",
     "qrcode": "1.5.4",
-    "leaflet": "1.9.4"
+    "leaflet": "1.9.4",
+    "lucide-react": "^0.468.0"
   },
   "devDependencies": {
     "tailwindcss": "3.4.10",

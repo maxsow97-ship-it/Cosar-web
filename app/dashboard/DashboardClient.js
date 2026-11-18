@@ -62,7 +62,7 @@ const URGENCY_LABELS = {
   faible: { label: 'Faible', cls: 'bg-slate-100 text-slate-500' },
 };
 
-export default function DashboardClient({ userName, initialDevis, analyticsEvents }) {
+export default function DashboardClient({ userName, role = 'admin', initialDevis, analyticsEvents }) {
   const [rows, setRows] = useState(initialDevis);
   const [filter, setFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -141,7 +141,7 @@ export default function DashboardClient({ userName, initialDevis, analyticsEvent
   }, [analyticsEvents]);
 
   return (
-    <DashboardShell userName={userName}>
+    <DashboardShell userName={userName} role={role}>
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
         <div className="pb-2">
           <h1 className="text-2xl font-bold text-[#182038]">Que voulez-vous faire aujourd&apos;hui ?</h1>
