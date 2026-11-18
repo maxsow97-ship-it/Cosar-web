@@ -21,6 +21,7 @@ export default async function DashboardPage() {
   return (
     <DashboardClient
       userName={profile?.nom_complet || user?.email}
+      role={profile.role}
       initialDevis={devisRes.data || []}
       analyticsEvents={analyticsRes.data || []}
     />

@@ -1,3 +1,0 @@
-# Cosar-web
-Cosar group
-  

@@ -19,13 +19,24 @@ function LoginForm() {
     setError('');
     setLoading(true);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       setError('Email ou mot de passe incorrect.');
       return;
     }
-    router.push('/dashboard');
+    const userId = data?.user?.id;
+    let destination = '/dashboard';
+    if (userId) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .maybeSingle();
+      if (profile?.role === 'client') destination = '/client';
+      else if (profile?.role === 'agent') destination = '/dashboard/mon-espace';
+    }
+    router.push(destination);
     router.refresh();
   }
 
